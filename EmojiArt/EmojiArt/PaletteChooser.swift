@@ -20,14 +20,18 @@ struct PaletteChooser: View {
     }
     
     var chooser: some View {
-        Button {
-            withAnimation {
-                store.cursorIndex += 1
-            }
-        } label: {
-            Image(systemName: "paintpalette")
+        AnimatedActionButton(systemImage: "paintpalette") {
+            store.cursorIndex += 1
         }
-        
+        .contextMenu {
+            AnimatedActionButton("New", systemImage: "plus") {
+                store.insert(Palette(name: "Squigglies", emojis: "♡♥︎❥❦❧☙❢এლდღɞʚෆᰔᩚᰔঞଓᜊᥫ᭡ꨄஐᦗ"))
+            }
+            AnimatedActionButton("Delete", systemImage: "minus.circle", role: .destructive) {
+                store.palettes.remove(at: store.cursorIndex)
+            }
+            
+        }
         
     }
     

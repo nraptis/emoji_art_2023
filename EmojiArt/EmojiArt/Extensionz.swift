@@ -52,11 +52,7 @@ struct AnimatedActionButton: View {
     var role: ButtonRole?
     let action: () -> Void
     
-    init(_ title: String? = nil,
-         systemImage: String? = nil,
-         role: ButtonRole? = nil,
-         action: @escaping () -> Void
-    ) {
+    init(_ title: String? = nil, systemImage: String? = nil, role: ButtonRole? = nil, action: @escaping () -> Void) {
         self.title = title
         self.systemImage = systemImage
         self.role = role
