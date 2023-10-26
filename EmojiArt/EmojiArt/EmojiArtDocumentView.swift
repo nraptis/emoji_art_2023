@@ -42,6 +42,26 @@ struct EmojiArtDocumentView: View {
         }
     }
     
+    @ViewBuilder private func documentContents(in geometry: GeometryProxy) -> some View {
+        AsyncImage(url: document.background) { phase in
+            if let image = phase.image {
+                image
+            } else if let url = document.background {
+                if phase.error != nil {
+                    Text("\(url.absoluteString)")
+                } else {
+                    ProgressView()
+                }
+            }
+        }
+            .position(Emoji.Position.zero.in(geometry))
+        ForEach(document.emojis) { emoji in
+            Text(emoji.string)
+                .font(emoji.font)
+                .position(emoji.position.in(geometry))
+        }
+    }
+    
     @State private var zoom: CGFloat = 0.5
     @State private var pan = CGOffset(width: 100, height: 100)
     
@@ -68,15 +88,7 @@ struct EmojiArtDocumentView: View {
             }
     }
     
-    @ViewBuilder private func documentContents(in geometry: GeometryProxy) -> some View {
-        AsyncImage(url: document.background)
-            .position(Emoji.Position.zero.in(geometry))
-        ForEach(document.emojis) { emoji in
-            Text(emoji.string)
-                .font(emoji.font)
-                .position(emoji.position.in(geometry))
-        }
-    }
+    
     
     private func drop(_ sturldatas: [Sturldata], at location: CGPoint, in geometry: GeometryProxy) -> Bool {
         for sturldata in sturldatas {

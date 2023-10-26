@@ -11,7 +11,7 @@ import SwiftUI
 struct EmojiArtApp: App {
     
     @StateObject var defaultDocument = EmojiArtDocument()
-    @StateObject var paletteStore = PaletteStore(name: "Main")
+    @StateObject var paletteStore = PaletteStore(name: "Palette")
     
     var body: some Scene {
         WindowGroup {
