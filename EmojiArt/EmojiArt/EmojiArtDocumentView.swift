@@ -11,9 +11,11 @@ struct EmojiArtDocumentView: View {
     
     typealias Emoji = EmojiArt.Emoji
     
+    @Environment(\.undoManager) var undoManager
+    
     @ObservedObject var document: EmojiArtDocument
     private let emojis = "😍💩🤡🫵🦫🚨🍎💋👻💀👽🎃🍗🌮⚽️🏀🏈🎾🎮🎰🧩🍕🚕🌷🦷🌵🍔🎂🐻‍❄️🪦"
-    private let paletteEmojiSize: CGFloat = 40
+    @ScaledMetric var paletteEmojiSize: CGFloat = 40
     
     var body: some View {
         VStack {
@@ -22,6 +24,9 @@ struct EmojiArtDocumentView: View {
                 .font(.system(size: paletteEmojiSize))
                 .padding(.horizontal)
                 .scrollIndicators(.hidden)
+        }
+        .toolbar {
+            UndoButton()
         }
     }
     
@@ -44,7 +49,6 @@ struct EmojiArtDocumentView: View {
             }
             .gesture(panGesture.simultaneously(with: zoomGesture))
             .onTapGesture(count: 2) {
-             
                 zoomToFit(document.boundingBox,
                           in: geometry)
             }
@@ -143,12 +147,13 @@ struct EmojiArtDocumentView: View {
         for sturldata in sturldatas {
             switch sturldata {
             case .url(let url):
-                document.setBackground(url)
+                document.setBackground(url, undoWith: undoManager)
                 return true
             case .string(let emoji):
                 document.addEmoji(emoji,
                                   at: emojiPosition(at: location, in: geometry),
-                                  size: paletteEmojiSize / zoom)
+                                  size: paletteEmojiSize / zoom,
+                                  undoWith: undoManager)
             default:
                 break
             }
